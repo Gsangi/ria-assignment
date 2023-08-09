@@ -3,13 +3,16 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {theme} from "./theme";
+import {ChakraProvider} from "@chakra-ui/react";
+import "typeface-karla"
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
-        <chakraProvider>
-            <App/>
-        </chakraProvider>
+       <ChakraProvider theme={theme}>
+           <App />
+       </ChakraProvider>
     </React.StrictMode>
 );
 
