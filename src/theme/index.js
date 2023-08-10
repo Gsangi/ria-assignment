@@ -97,6 +97,22 @@ const theme = extendTheme({
             fontStyle: "normal",
             fontWeight: "400",
             lineHeight: "normal"
+        },
+        cardTitleModal: {
+            fontFamily: "Karla",
+            fontSize: "36px",
+            fontStyle: "normal",
+            fontWeight: "700",
+            lineHeight: "normal",
+        },
+        GenerationModalTitle: {
+            color: "#FDFDFD",
+            textAlign: "center",
+            fontFamily: "Source Sans Pro",
+            fontSize: "24px",
+            fontStyle: "normal",
+            fontWeight: "400",
+            lineHeight: "normal"
         }
     }
 })
