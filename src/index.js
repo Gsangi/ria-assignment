@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import {theme} from "./theme";
 import {ChakraProvider} from "@chakra-ui/react";
 import "typeface-karla"
+import "typeface-source-sans-pro"
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
