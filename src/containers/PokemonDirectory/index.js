@@ -1,26 +1,36 @@
-import { Flex, Input, Text, useDisclosure, Circle } from "@chakra-ui/react";
+import { Flex, Input, Text, useDisclosure, Circle, useBreakpointValue } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 import PokemonProfile from "../../components/PokemonProfile";
 import usePokemonApi from "../../hooks/usePokemonApi";
 import { useState } from "react";
 import ProfileModal from "../../components/ProfileModal";
+import {leastSquaresFitCalc} from "../../utils";
 
-const MotionFlex = motion(Flex);
 
-const pageTransitionVariants = {
-    hidden: { opacity: 0, y: "-10%" },
-    visible: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: "10%" }
-};
 
 const PokemonDirectory = () => {
+    const MotionFlex = motion(Flex);
+
+    const pageTransitionVariants = {
+        hidden: { opacity: 0, y: "-10%" },
+        visible: { opacity: 1, y: 0 },
+        exit: { opacity: 0, y: "10%" }
+    };
+
+    const itemsPerPage = 50
+
+    const marginTopValue = leastSquaresFitCalc(new Map([[375, 20], [1440, 73]]));
+
+    const inputWidth = leastSquaresFitCalc(new Map([[375, 320], [1440, 1088]]));
+
     const { data: pokemonList, isLoading } = usePokemonApi();
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [selectedPokemon, setSelectedPokemon] = useState(null);
 
-    const itemsPerPage = 50;
+    const flexDirection = useBreakpointValue({ base: "column", md: "row" });
+    const marginX = useBreakpointValue({ base: "4", md: "157px" });
 
     const openModal = (pokemon) => {
         setSelectedPokemon(pokemon);
@@ -47,7 +57,8 @@ const PokemonDirectory = () => {
     }
 
     return (
-        <Flex direction="column" mt="73px" justifyContent="center">
+        <Flex direction="column" mt={marginTopValue} alignItems="center">
+
             <Text textStyle="heading2" textAlign="center" mb="17px">
                 800 Pokemons for you to choose your favorite
             </Text>
@@ -58,13 +69,15 @@ const PokemonDirectory = () => {
                 onChange={(event) => setSearchTerm(event.target.value)}
                 mt="17px"
                 mb="25px"
-                width="1088px"
+                width={inputWidth}
+                maxW="100%"
             />
-            <AnimatePresence mode = 'wait'>
+            <AnimatePresence mode='wait'>
                 <MotionFlex
                     wrap="wrap"
+                    direction={flexDirection}
                     justify="center"
-                    mx="157px"
+                    mx={marginX}
                     key={currentPage}
                     initial="hidden"
                     animate="visible"
@@ -90,7 +103,6 @@ const PokemonDirectory = () => {
                 </MotionFlex>
             </AnimatePresence>
 
-            {/* Pagination dots */}
             <Flex direction="row" alignItems="center" justifyContent="center" mt="16px">
                 {pageNumbers.map((number) => (
                     <Circle
@@ -110,3 +122,4 @@ const PokemonDirectory = () => {
 };
 
 export default PokemonDirectory;
+

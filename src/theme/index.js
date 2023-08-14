@@ -63,6 +63,16 @@ const theme = extendTheme({
             fontWeight: "700",
             lineHeight: "normal",
         },
+        heading4: {
+            color: "#000",
+            textAlign: "center",
+            fontFamily: "Karla",
+            fontSize: "42px",
+            fontStyle: "normal",
+            fontWeight: "700",
+            lineHeight: "normal",
+            letterSpacing: "4px",
+        },
         errorHeading: {
             color: "#F2F2F2",
             fontFamily: "Karla",
