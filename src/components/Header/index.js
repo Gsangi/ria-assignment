@@ -15,20 +15,21 @@ const Header = () => {
 
     const Links = () => (
         <Flex flexDir={linkDirection} alignItems="center" justifyContent="center" mt={{ base: 2, md: 0 }}>
-            <ChakraLink as={props => <Link to="/home" {...props} />} mr={4}>
+            <ChakraLink as={Link} to="/home" mr={4}>
                 Home
             </ChakraLink>
-            <ChakraLink as={props => <Link to="/pokedex" {...props} />} mr={4}>
+            <ChakraLink as={Link} to="/pokedex" mr={4}>
                 Pokedex
             </ChakraLink>
-            <ChakraLink as={props => <Link to="/legendaries" {...props} />} mr={4}>
+            <ChakraLink as={Link} to="/legendaries" mr={4}>
                 Legendaries
             </ChakraLink>
-            <ChakraLink as={props => <Link to="/documentation" {...props} />}>
+            <ChakraLink as={Link} to="/documentation">
                 Documentation
             </ChakraLink>
         </Flex>
     );
+
 
     return (
         <Flex bg="custom.third" p={4} flexDirection="column" boxShadow="0px 4px 16px 0px rgba(1, 28, 64, 0.20)">
