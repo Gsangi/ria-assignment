@@ -1,19 +1,46 @@
 import {Flex, useBreakpointValue} from "@chakra-ui/react";
-import LegendaryProfile from "../../components/LegendaryProfile";
 import {useState} from "react";
-import LegendaryCard from "../../components/LegendaryCard";
 import {leastSquaresFitCalc, legendaryPokemons} from "../../utils";
 import {ArrowLeft} from "../../components/Icons/arrowLeft";
 import {ArrowRight} from "../../components/Icons/arrowRight";
+import {useQuery} from "react-query";
+import pokemonApi from "../../api";
+import Profile from "./Components/Profile";
+import Card from "./Components/Card";
 
 const Legendary = () => {
-    const [selectedPokemon, setSelectedPokemon] = useState(legendaryPokemons[0]);
-    const [currentIndex, setCurrentIndex] = useState(0);
 
-    const handlePokemonClick = (name) => {
-        const newSelected = legendaryPokemons.find(p => p.name === name);
-        setSelectedPokemon(newSelected);
-    };
+    const {data, isLoading} = useQuery({
+        queryKey: ["legendary"],
+        queryFn: () => {
+            return new Promise(async (resolve, reject) => {
+                try {
+                    const {data} = await pokemonApi.get("/pokemon-species", {params: {limit: 2000}})
+                    const promises = data.results.map(({name}) => pokemonApi.get("/pokemon-species/" + name))
+                    const results = await Promise.allSettled(promises);
+
+                    resolve(results.filter(({status, value, reason}) => {
+                        if (status === "rejected") {
+                            console.warn(reason);
+                            return false;
+                        }
+
+                        return value.data.is_legendary;
+                    }).map(({value}) => {
+                        return {
+                            ...value.data,
+                            icon: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${value.data.id}.png`
+                        }
+                    }))
+                } catch (e) {
+                    reject(e)
+                }
+            })
+        }
+    })
+
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [currentPokemonName, setCurrentPokemonName] = useState(data?.[0].name)
 
     const handleArrowRightClick = () => {
         if (currentIndex + cardsPerPage < legendaryPokemons.length) {
@@ -29,29 +56,32 @@ const Legendary = () => {
 
     const cardsPerPage = useBreakpointValue({
         base: 2,
-        md: 6
+        md: 4
     });
 
     return (
         <Flex bg="#212121">
             <Flex direction="column" mx={leastSquaresFitCalc(new Map([
-                [375,25],[1440,158]
+                [375, 25], [1440, 158]
             ]))}>
-                <LegendaryProfile pokemon={selectedPokemon}/>
+                <Profile name={currentPokemonName}/>
                 <Flex justifyContent="center" alignItems="center" gap="20px">
                     <div style={{cursor: "pointer"}} onClick={handleArrowLeftClick}>
                         <ArrowLeft/>
                     </div>
                     <Flex gap={leastSquaresFitCalc(new Map([
-                        [375, 4], [1440, 28]
+                        [375, 24], [1440, 80]
                     ]))} my={leastSquaresFitCalc(new Map([
                         [375, 4], [1440, 64]
-                    ]))}>
-                        {legendaryPokemons.slice(currentIndex, currentIndex + cardsPerPage).map((p) => {
+                    ]))} mx="36px">
+                        {data?.slice(currentIndex, currentIndex + cardsPerPage).map((p) => {
                             return (
-                                <LegendaryCard
-                                    text={p.name}
-                                    onClick={() => handlePokemonClick(p.name)}
+                                <Card
+                                    key={p.id}
+                                    name={p.name}
+                                    icon={p.icon}
+                                    onClick={() => setCurrentPokemonName(p.name)}
+                                    selected={p.name === currentPokemonName}
                                 />
                             );
                         })}
