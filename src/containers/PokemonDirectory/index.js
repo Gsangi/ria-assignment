@@ -8,15 +8,24 @@ import styles from "./styles.module.css"
 
 const PokemonDirectory = () => {
     const itemsPerPage = 30
-
+    const [searchTerm, setSearchTerm] = useState("")
+    const [currentPage, setCurrentPage] = useState(1)
+    const [selectedType, setSelectedType] = useState("")
     const inputWidth = leastSquaresFitCalc(new Map([[375, 320], [1440, 1088]]))
 
-    const {data, isLoading} = useQuery({
+    const {data: pokemons, isLoading} = useQuery({
         queryKey: ["pokemons"],
         queryFn: () => pokemonApi.get("/pokemon", {params: {limit: 20000}}).then(res => res.data)
     })
-    const [searchTerm, setSearchTerm] = useState("")
-    const [currentPage, setCurrentPage] = useState(1)
+    const {data: types, isLoading: isTypesLoading} = useQuery({
+        queryKey: ["types"],
+        queryFn: () => pokemonApi.get("/type", {params: {limit: 100}}).then(res => res.data)
+    })
+    const {data: filterPokemon, isLoading: isFilterLoading, refetch} = useQuery({
+        queryKey: ["type", selectedType],
+        queryFn: () => pokemonApi.get("/type/" + selectedType).then(res => res.data.pokemon.map(({pokemon}) => pokemon)),
+        enabled: !!selectedType
+    })
 
     useEffect(() => {
         if (currentPage !== 1 && searchTerm) {
@@ -24,11 +33,24 @@ const PokemonDirectory = () => {
         }
     }, [searchTerm])
 
-    if (isLoading) {
+    useEffect(() => {
+        if (currentPage !== 1 && selectedType) {
+            setCurrentPage(1)
+        }
+        if (selectedType) {
+            refetch(); //Refetch filterPokemon
+        }
+    }, [selectedType])
+
+    const handleChangeType = (event) => {
+        setSelectedType(event.currentTarget.value);
+    }
+
+    if (isLoading || isTypesLoading || isFilterLoading) {
         return <Text>Loading...</Text>
     }
 
-    const pokeList = data.results.filter(({name}) => {
+    const pokeList = (selectedType ? filterPokemon : pokemons.results).filter(({name}) => {
         if (!searchTerm) return true;
         return name.includes(searchTerm) || searchTerm.includes(name);
     });
@@ -36,7 +58,7 @@ const PokemonDirectory = () => {
     return (
         <div className={styles.pokemonGrid}>
             <Text textStyle="heading2" textAlign="center" gridColumn="1/-1">
-                {data.results.length} <b> Pokemons </b> for you to choose your favorite
+                {pokemons.results.length} <b> Pokemons </b> for you to choose your favorite
             </Text>
             <Input
                 placeholder="Enter Pokémon name"
@@ -51,6 +73,12 @@ const PokemonDirectory = () => {
                 border="0"
                 gridColumn="1/-1"
             />
+            <div className={styles.filterContainer}>
+                <select value={selectedType} onChange={handleChangeType}>
+                    <option value="" defaultChecked disabled>Select type</option>
+                    {types.results.map(({name, url}) => <option value={name}>{name}</option>)}
+                </select>
+            </div>
             {pokeList.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map(({name, url}) => (
                 <PokemonCard key={url} name={name}/>
             ))}

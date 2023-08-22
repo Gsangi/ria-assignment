@@ -7,3 +7,22 @@
     margin-inline: max(32px, calc((100vw - 1100px)/2));
     padding-top: 32px;
 }
+
+.filterContainer {
+    display: flex;
+    gap: 64px;
+    grid-column: 1/-1;
+}
+
+.filterContainer select {
+    appearance: none;
+    width: 136px;
+    padding: 4px 24px 4px 16px;
+    background: rgba(242, 242, 242, 1) url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%23000000" viewBox="0 0 256 256"><path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path></svg>') no-repeat calc(100% - 8px);
+    border-radius: 4px;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    font-size: 16px;
+    text-align: center;
+    position: relative;
+}
+
