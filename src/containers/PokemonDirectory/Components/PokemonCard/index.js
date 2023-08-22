@@ -1,11 +1,10 @@
 import styles from "./styles.module.css"
 import {useQuery} from "react-query";
 import pokemonApi from "../../../../api";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useRef} from "react";
 import clsx from "clsx";
 
 const PokemonCard = ({name}) => {
-    const [isOpen, setIsOpen] = useState(false);
     const dialogRef = useRef()
     const {data, isLoading} = useQuery({
         queryKey: ["pokemon", name],
@@ -25,14 +24,6 @@ const PokemonCard = ({name}) => {
         dialogRef.current.showModal()
     }
 
-
-    useEffect(() => {
-        console.log(data)
-    }, [data])
-
-    useEffect(() => {
-        console.log(speciesData)
-    }, [speciesData])
     return (
         data && speciesData ?
             <>

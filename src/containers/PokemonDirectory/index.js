@@ -1,78 +1,63 @@
 import {Circle, Flex, Input, Text} from "@chakra-ui/react";
-import usePokemonApi from "../../hooks/usePokemonApi";
 import {useEffect, useState} from "react";
 import {leastSquaresFitCalc} from "../../utils";
 import {useQuery} from "react-query";
 import pokemonApi from "../../api";
 import PokemonCard from "./Components/PokemonCard";
 import styles from "./styles.module.css"
-import PokemonModal from "./Components/PokemonModal";
-
 
 const PokemonDirectory = () => {
-    const itemsPerPage = 50
-
-    const marginTopValue = leastSquaresFitCalc(new Map([[375, 20], [1440, 73]]))
+    const itemsPerPage = 30
 
     const inputWidth = leastSquaresFitCalc(new Map([[375, 320], [1440, 1088]]))
 
-    const {data: pokemonList} = usePokemonApi()
     const {data, isLoading} = useQuery({
         queryKey: ["pokemons"],
-        queryFn: () => pokemonApi.get("/pokemon", {params: {limit: 500}}).then(res => res.data)
+        queryFn: () => pokemonApi.get("/pokemon", {params: {limit: 20000}}).then(res => res.data)
     })
     const [searchTerm, setSearchTerm] = useState("")
     const [currentPage, setCurrentPage] = useState(1)
 
-
     useEffect(() => {
-        console.log(data)
-    }, [data])
+        if (currentPage !== 1 && searchTerm) {
+            setCurrentPage(1)
+        }
+    }, [searchTerm])
 
     if (isLoading) {
         return <Text>Loading...</Text>
     }
 
-    const filteredPokemonList = pokemonList.filter((pokemon) =>
-        pokemon.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-    const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(filteredPokemonList.length / itemsPerPage); i++) {
-        pageNumbers.push(i);
-    }
+    const pokeList = data.results.filter(({name}) => {
+        if (!searchTerm) return true;
+        return name.includes(searchTerm) || searchTerm.includes(name);
+    });
 
     return (
-        <Flex direction="column" mt={marginTopValue} alignItems="center">
-
-            <Text textStyle="heading2" textAlign="center" mb="17px">
-                800 <b> Pokemons </b> for you to choose your favorite
+        <div className={styles.pokemonGrid}>
+            <Text textStyle="heading2" textAlign="center" gridColumn="1/-1">
+                {data.results.length} <b> Pokemons </b> for you to choose your favorite
             </Text>
             <Input
                 placeholder="Enter Pokémon name"
                 size="md"
                 value={searchTerm}
                 onChange={(event) => setSearchTerm(event.target.value)}
-                mt="17px"
-                mb="25px"
                 width={inputWidth}
                 maxW="100%"
                 borderRadius="40px"
                 boxShadow="4px 4px 16px 0px rgba(1,28,64, 0.20)"
                 background="#F2F2F2"
                 border="0"
+                gridColumn="1/-1"
             />
-            <div className={styles.pokemonGrid}>
-                {data.results.map(({name, url}) => (
-                    <PokemonCard key={url} name={name}/>
-                ))}
-            </div>
-
-            <Flex direction="row" alignItems="center" justifyContent="center" mt="16px">
-                {pageNumbers.map((number) => (
-                    <Circle
+            {pokeList.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map(({name, url}) => (
+                <PokemonCard key={url} name={name}/>
+            ))}
+            <Flex direction="row" alignItems="center" justifyContent="center" mb="64px" gridColumn="1/-1">
+                {Array.from(Array(Math.ceil(pokeList.length / itemsPerPage)).keys()).map((number) => {
+                    number = number + 1;
+                    return <Circle
                         key={number}
                         size="8px"
                         m="2px"
@@ -80,12 +65,11 @@ const PokemonDirectory = () => {
                         cursor="pointer"
                         transition={{duration: 0.3}}
                         _hover={{bgColor: "black"}}
-                        onClick={() => paginate(number)}
+                        onClick={() => setCurrentPage(number)}
                     />
-                ))}
+                })}
             </Flex>
-            <PokemonModal/>
-        </Flex>
+        </div>
     );
 };
 
