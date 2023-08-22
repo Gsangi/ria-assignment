@@ -1,53 +1,41 @@
-import { Flex, Input, Text, useDisclosure, Circle, useBreakpointValue } from "@chakra-ui/react";
-import { motion, AnimatePresence } from "framer-motion";
-import PokemonProfile from "../../components/PokemonProfile";
+import {Circle, Flex, Input, Text} from "@chakra-ui/react";
 import usePokemonApi from "../../hooks/usePokemonApi";
-import { useState } from "react";
-import ProfileModal from "../../components/ProfileModal";
+import {useEffect, useState} from "react";
 import {leastSquaresFitCalc} from "../../utils";
-
+import {useQuery} from "react-query";
+import pokemonApi from "../../api";
+import PokemonCard from "./Components/PokemonCard";
+import styles from "./styles.module.css"
+import PokemonModal from "./Components/PokemonModal";
 
 
 const PokemonDirectory = () => {
-    const MotionFlex = motion(Flex);
-
-    const pageTransitionVariants = {
-        hidden: { opacity: 0, y: "-10%" },
-        visible: { opacity: 1, y: 0 },
-        exit: { opacity: 0, y: "10%" }
-    };
-
     const itemsPerPage = 50
 
-    const marginTopValue = leastSquaresFitCalc(new Map([[375, 20], [1440, 73]]));
+    const marginTopValue = leastSquaresFitCalc(new Map([[375, 20], [1440, 73]]))
 
-    const inputWidth = leastSquaresFitCalc(new Map([[375, 320], [1440, 1088]]));
+    const inputWidth = leastSquaresFitCalc(new Map([[375, 320], [1440, 1088]]))
 
-    const { data: pokemonList, isLoading } = usePokemonApi();
-    const [searchTerm, setSearchTerm] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const [selectedPokemon, setSelectedPokemon] = useState(null);
+    const {data: pokemonList} = usePokemonApi()
+    const {data, isLoading} = useQuery({
+        queryKey: ["pokemons"],
+        queryFn: () => pokemonApi.get("/pokemon", {params: {limit: 500}}).then(res => res.data)
+    })
+    const [searchTerm, setSearchTerm] = useState("")
+    const [currentPage, setCurrentPage] = useState(1)
 
-    const flexDirection = useBreakpointValue({ base: "column", md: "row" });
-    const marginX = useBreakpointValue({ base: "4", md: "157px" });
 
-    const openModal = (pokemon) => {
-        setSelectedPokemon(pokemon);
-        onOpen();
-    };
+    useEffect(() => {
+        console.log(data)
+    }, [data])
 
     if (isLoading) {
-        return <Text>Loading...</Text>;
+        return <Text>Loading...</Text>
     }
 
     const filteredPokemonList = pokemonList.filter((pokemon) =>
         pokemon.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
-
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = filteredPokemonList.slice(indexOfFirstItem, indexOfLastItem);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -60,7 +48,7 @@ const PokemonDirectory = () => {
         <Flex direction="column" mt={marginTopValue} alignItems="center">
 
             <Text textStyle="heading2" textAlign="center" mb="17px">
-                800 Pokemons for you to choose your favorite
+                800 <b> Pokemons </b> for you to choose your favorite
             </Text>
             <Input
                 placeholder="Enter Pokémon name"
@@ -71,37 +59,16 @@ const PokemonDirectory = () => {
                 mb="25px"
                 width={inputWidth}
                 maxW="100%"
+                borderRadius="40px"
+                boxShadow="4px 4px 16px 0px rgba(1,28,64, 0.20)"
+                background="#F2F2F2"
+                border="0"
             />
-            <AnimatePresence mode='wait'>
-                <MotionFlex
-                    wrap="wrap"
-                    direction={flexDirection}
-                    justify="center"
-                    mx={marginX}
-                    key={currentPage}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    variants={pageTransitionVariants}
-                >
-                    {currentItems.map((pokemon) => (
-                        <PokemonProfile
-                            key={pokemon.number}
-                            text={pokemon.name}
-                            number={pokemon.number}
-                            circleText={pokemon.circleText}
-                            onClick={() => openModal(pokemon)}
-                        />
-                    ))}
-                    {selectedPokemon && (
-                        <ProfileModal
-                            isOpen={isOpen}
-                            onClose={onClose}
-                            pokemon={selectedPokemon}
-                        />
-                    )}
-                </MotionFlex>
-            </AnimatePresence>
+            <div className={styles.pokemonGrid}>
+                {data.results.map(({name, url}) => (
+                    <PokemonCard key={url} name={name}/>
+                ))}
+            </div>
 
             <Flex direction="row" alignItems="center" justifyContent="center" mt="16px">
                 {pageNumbers.map((number) => (
@@ -111,12 +78,13 @@ const PokemonDirectory = () => {
                         m="2px"
                         bgColor={currentPage === number ? "black" : "gray.400"}
                         cursor="pointer"
-                        transition={{ duration: 0.3 }}
-                        _hover={{ bgColor: "black" }}
+                        transition={{duration: 0.3}}
+                        _hover={{bgColor: "black"}}
                         onClick={() => paginate(number)}
                     />
                 ))}
             </Flex>
+            <PokemonModal/>
         </Flex>
     );
 };

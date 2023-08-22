@@ -11,7 +11,7 @@ const LegendaryProfile = ({pokemon}) => {
 
     return (
         <Flex direction="column" my={leastSquaresFitCalc(new Map([[375, 32], [1440, 40]]))}>
-            <Text textStyle="heading1" fontSize={leastSquaresFitCalc(new Map([[375, 20], [1440, 24]]))} fontWeight="400"
+            <Text textStyle="heading1" fontSize={leastSquaresFitCalc(new Map([[375, 44], [1440, 72]]))} fontWeight="400"
                   color="#FDFDFD">Legendaries</Text>
             <Flex gap={leastSquaresFitCalc(new Map([[375, 23], [1440, 270]]))} justifyContent="center"
                   alignItems="center" display={displayBreakpoint}>
@@ -23,7 +23,7 @@ const LegendaryProfile = ({pokemon}) => {
                       width={leastSquaresFitCalc(new Map([[375, 325], [1440, 412]]))}
                       height={leastSquaresFitCalc(new Map([[375, 373], [1440, 417]]))}
                 >
-                    <Text textStyle="heading1" fontSize={leastSquaresFitCalc(new Map([[375, 18], [1440, 22]]))}
+                    <Text textStyle="heading1" fontSize={leastSquaresFitCalc(new Map([[375, 62], [1440, 72]]))}
                           textColor="#FDFDFD">{pokemon.name}</Text>
                     <Text textStyle="heading3" fontSize={leastSquaresFitCalc(new Map([[375, 14], [1440, 16]]))}
                           textColor="#FDFDFD">

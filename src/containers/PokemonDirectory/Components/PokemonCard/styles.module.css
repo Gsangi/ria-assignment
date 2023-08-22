@@ -1,0 +1,161 @@
+:root {
+    --type-normal: #CFCFCF;
+    --type-fighting: #FF5A5A;
+    --type-flying: #92A8FF;
+    --type-poison: #C763FF;
+    --type-ground: #FFC085;
+    --type-rock: #DAA673;
+    --type-bug: #ABE574;
+    --type-ghost: #7A62D6;
+    --type-steel: #8FA8A8;
+    --type-fire: #FF6F31;
+    --type-water: #4FAEFF;
+    --type-grass: #5FD06B;
+    --type-electric: #FFEC52;
+    --type-psychic: #FF92C1;
+    --type-ice: #76F0FF;
+    --type-dragon: #7766FF;
+    --type-dark: #7A6A82;
+    --type-fairy: #FF92D6;
+    --type-unknown: #A2D1FF;  /* A bright blue tint for "unknown", but can be changed as desired */
+    --type-shadow: #626687;   /* A brighter shade for "shadow", but still kept it a bit muted */
+}
+
+
+
+.card {
+    height: 132px;
+    position: relative;
+    padding-block: 10px;
+    padding-left: 24px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.card h4 {
+    font-size: 18px;
+    line-height: 28px;
+    font-weight: 600;
+    color: #212121;
+    text-shadow: 2px 2px 6px rgba(33 33 33 / 0.30);
+    text-transform: capitalize;
+}
+
+.cardLoading {
+    animation: shimmer 1s infinite;
+}
+
+.statContainer {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 8px;
+}
+
+.stat {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 32px;
+    width: 32px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #212121;
+    padding: 8px;
+    border-radius: 99999px;
+    box-shadow: 0 0 0 3px currentColor;
+}
+
+.stat::after {
+    content: attr(data-name);
+    position: absolute;
+    bottom: -20px;
+    color: #4b4b4b;
+    font-size: 12px;
+    text-transform: capitalize;
+}
+
+.typeContainer {
+    margin-top: 24px;
+    display: flex;
+    gap: 4px;
+}
+.type {
+    padding-inline: 12px;
+    padding-bottom: 2px;
+    border-radius: 99999px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #212121;
+    text-transform: capitalize;
+    box-shadow: 0 -3px 0 rgb(0 0 0 / 0.2) inset;
+}
+
+.coverImage {
+    position: absolute;
+    inset-block: 0;
+    right: 0;
+    z-index: -1;
+    height: 100%;
+    width: 60%;
+    object-fit: contain;
+}
+
+@keyframes shimmer {
+    0%, 100% {
+        background: rgba(183, 183, 183, 0.42);
+    }
+
+    50% {
+        background: rgba(150, 150, 150, 0.53);
+    }
+}
+
+
+.modal {
+    height: 364px;
+    z-index: 30;
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 0;
+    outline: unset;
+}
+
+.modal[open] {
+    display: flex;
+}
+
+.modal::backdrop {
+    background: rgba(33, 33, 33, 0.66);
+}
+
+body:has( .modal[open]) {
+    overflow: hidden;
+}
+
+.modalCoverImage {
+    height: 100%;
+    box-shadow: 2px 0 4px rgba(33, 33, 33, 0.11);
+    flex: 1;
+    z-index: 5;
+}
+
+.modalData {
+    height: 100%;
+    display: flex;
+    flex-basis: 120%;
+    padding-left: 12px;
+    padding-right: 20px;
+    padding-top: 28px;
+}
+
+.modalData h3 {
+    font-size: 36px;
+    font-weight: 700;
+    text-shadow: 2px 2px 6px rgba(33 33 33 / 0.30);
+    color: #FDFDFD;
+}

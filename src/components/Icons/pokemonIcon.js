@@ -1,5 +1,5 @@
-export const PokemonIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="158" height="63" viewBox="0 0 158 63" fill="none">
+export const PokemonIcon = ({width, height}) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 158 63" fill="none">
         <path fillRule="evenodd" clipRule="evenodd"
               d="M82.9613 52.7803V37.2688L66.2294 30.2838L75.0112 21.0924L63.5019 10.0898L60.2378 16.8244L60.363 10.35L45.7773 15.3695L46.1529 23.8094L48.6301 23.1157L51.2056 52.8959L61.4898 51.2677L61.4719 41.3249L82.9613 52.7803Z"
               fill="#0B0000"/>

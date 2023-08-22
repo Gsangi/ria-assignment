@@ -1,0 +1,76 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s ease;
+    height: 100%;
+    width: 100%;
+    background: #0000004a;
+}
+.modalOverlay:target {
+    opacity: 1;
+    pointer-events: all;
+}
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    max-width: 600px;
+    width: 80%;
+    transform: translate(-50%, -50%) scale(0.8);
+    background: white;
+    padding: 20px 30px;
+    font-family: "segoe ui", sans-serif;
+    border-radius: 4px;
+    transition: all 2s ease;
+    box-shadow: 0px 8px 40px -20px black;
+}
+.modalOverlay:target .modal {
+    transform: translate(-50%, -50%) scale(1);
+    transition: all 0.2s ease;
+}
+
+.modalTitle {
+    font-size: 22px;
+    color: #4b4b4b;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+p {
+    font-size: 16px;
+    line-height: 23px;
+    color: #2a2a2a;
+    margin-bottom: 10px;
+}
+.modalBtn {
+    margin-top: 10px;
+    background: #2962ff00;
+    padding: 8px 14px;
+    display: inline-block;
+    color: #2962ff;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-radius: 3px;
+    font-weight: 600;
+    font-size: 14px;
+    border: 1px solid #2962ff;
+    user-select: none;
+}
+.modalBtn:hover {
+    background: #2962ff4d;
+}
+.modalBtn:focus {
+    background: #2962ff;
+    color: white;
+}
+
+
+.row{
+    display: flex;
+}
+
+.column{
+    flex: 50%;
+}
