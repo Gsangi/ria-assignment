@@ -1,8 +1,9 @@
 .pokemonGrid {
     align-self: stretch;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(352px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     column-gap: 36px;
     row-gap: 64px;
-    margin-inline: max(32px, calc((100vw - 1200px)/2));
+    margin-inline: max(32px, calc((100vw - 1100px)/2));
+
 }

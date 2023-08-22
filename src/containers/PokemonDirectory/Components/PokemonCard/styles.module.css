@@ -55,7 +55,7 @@
     margin-top: 8px;
 }
 
-.stat {
+.stat,.modalStat{
     position: relative;
     display: inline-flex;
     justify-content: center;
@@ -70,13 +70,15 @@
     box-shadow: 0 0 0 3px currentColor;
 }
 
-.stat::after {
+.stat::after, .modalStat::after{
     content: attr(data-name);
     position: absolute;
-    bottom: -20px;
+    top:calc(100% + 8px);
     color: #4b4b4b;
     font-size: 12px;
     text-transform: capitalize;
+    line-height: 1;
+    text-align: center;
 }
 
 .typeContainer {
@@ -119,14 +121,17 @@
 .modal {
     height: 364px;
     z-index: 30;
-    border-radius: 8px;
-    overflow: hidden;
     padding: 0;
     outline: unset;
+    overflow: visible;
+    border-radius: 8px;
 }
 
-.modal[open] {
+.modal > div {
     display: flex;
+    overflow: hidden;
+    height: 100%;
+    border-radius: 8px;
 }
 
 .modal::backdrop {
@@ -137,9 +142,21 @@ body:has( .modal[open]) {
     overflow: hidden;
 }
 
+.modalCloseIcon {
+    font-size: 32px;
+    font-weight: 900;
+    aspect-ratio: 1;
+    height: 32px;
+    position: absolute;
+    bottom: calc(100% + 16px);
+    right: 0;
+    background: url('data:image/svg+xml,<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="35.4683" height="9.21254" rx="3" transform="matrix(0.705326 0.708883 -0.705326 0.708883 6.5 0.328125)" fill="%23212121"/><rect width="35.4683" height="9.21254" rx="3" transform="matrix(-0.705326 0.708883 -0.705326 -0.708883 31.5156 6.53125)" fill="%23212121"/></svg>');
+    cursor: pointer;
+}
+
 .modalCoverImage {
     height: 100%;
-    box-shadow: 2px 0 4px rgba(33, 33, 33, 0.11);
+    box-shadow: 4px 0 4px rgba(33, 33, 33, 0.3);
     flex: 1;
     z-index: 5;
 }
@@ -147,10 +164,13 @@ body:has( .modal[open]) {
 .modalData {
     height: 100%;
     display: flex;
-    flex-basis: 120%;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 2;
     padding-left: 12px;
     padding-right: 20px;
-    padding-top: 28px;
+    padding-block: 24px;
+    white-space: nowrap;
 }
 
 .modalData h3 {
@@ -158,4 +178,79 @@ body:has( .modal[open]) {
     font-weight: 700;
     text-shadow: 2px 2px 6px rgba(33 33 33 / 0.30);
     color: #FDFDFD;
+}
+
+.modalData p{
+    color: #FDFDFD;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    padding-top: 12px;
+    text-transform: capitalize;
+}
+
+.modalDataHeading{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: end;
+}
+
+.modalDataHeading h3 {
+    line-height: 1;
+}
+
+.modalDataHeading p {
+    margin-left: 48px;
+    margin-bottom: 0;
+}
+
+.modalDataHeading span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    aspect-ratio: 1;
+    height: 40px;
+    width: 40px;
+    align-self: stretch;
+    background: rgba(242, 203, 7, 1);
+    border-radius: 50%;
+    margin-left: 8px;
+}
+
+.modalDataAbilities{
+    border-radius: 8px;
+    background-color: rgba(253, 253, 253, 1);
+    box-shadow: 4px 4px 4px 0px rgba(33, 33, 33, 0.10);
+    padding: 8px 16px;
+    margin-top: 12px;
+}
+
+.modalDataAbilities span:not(:nth-child(2))::before {
+    content: '-';
+    margin-inline: 2px;
+}
+
+.modalDataAbilities p{
+    color: #000;
+    font-size: 16px;
+    font-style: normal;
+    line-height: normal;
+    padding: 0;
+    margin: 0;
+    font-weight: 600;
+}
+
+.modalStatContainer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+}
+
+div:has(>.modalStat) {
+    padding: 16px 24px 32px;
+    background: white;
+    border-radius: 4px;
 }
