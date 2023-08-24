@@ -35,8 +35,8 @@ const Header = () => {
 
 
     return (
-        <Flex bg="custom.third" p={4} flexDirection="column" boxShadow="0px 4px 16px 0px rgba(1, 28, 64, 0.20)">
-            <Flex width="100%" justifyContent="space-between" alignItems="center">
+        <Flex bg="custom.third" flexDirection="column" >
+            <Flex width="100%" justifyContent="space-between" alignItems="center" boxShadow="0px 4px 16px 0px rgba(1, 28, 64, 0.20)" p={4}>
                 <Box ml={leastSquaresFitCalc(new Map([[375,14],[1440,158]]))}>
                     <PokemonIcon width={leastSquaresFitCalc(new Map([[375, 58], [1440, 158]]))}
                                  height={leastSquaresFitCalc(new Map([[375, 22], [1440, 63]]))}/>
