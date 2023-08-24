@@ -1,4 +1,4 @@
-import {Flex, useBreakpointValue} from "@chakra-ui/react";
+import {Box, Flex, useBreakpointValue} from "@chakra-ui/react";
 import {useState} from "react";
 import {leastSquaresFitCalc, legendaryPokemons} from "../../utils";
 import {ArrowLeft} from "../../components/Icons/arrowLeft";
@@ -10,7 +10,7 @@ import Card from "./Components/Card";
 
 const Legendary = () => {
 
-    const {data, isLoading} = useQuery({
+    const {data} = useQuery({
         queryKey: ["legendary"],
         queryFn: () => {
             return new Promise(async (resolve, reject) => {
@@ -60,20 +60,25 @@ const Legendary = () => {
     });
 
     return (
-        <Flex bg="#212121">
+        <Box bg="#212121" p={[2, 4, 6]}>
             <Flex direction="column" mx={leastSquaresFitCalc(new Map([
                 [375, 25], [1440, 158]
             ]))}>
                 <Profile name={currentPokemonName}/>
                 <Flex justifyContent="center" alignItems="center" gap="20px">
-                    <div style={{cursor: "pointer"}} onClick={handleArrowLeftClick}>
+                    <Box as="div" cursor="pointer" onClick={handleArrowLeftClick}>
                         <ArrowLeft/>
-                    </div>
-                    <Flex gap={leastSquaresFitCalc(new Map([
-                        [375, 24], [1440, 80]
-                    ]))} my={leastSquaresFitCalc(new Map([
-                        [375, 4], [1440, 64]
-                    ]))} mx="36px">
+                    </Box>
+                    <Flex
+                        gap={leastSquaresFitCalc(new Map([
+                            [375, 24], [1440, 80]
+                        ]))}
+                        my={leastSquaresFitCalc(new Map([
+                            [375, 4], [1440, 64]
+                        ]))}
+                        mx="36px"
+                        overflowX={["scroll", "hidden"]}
+                        width={["auto", "100%"]}>
                         {data?.slice(currentIndex, currentIndex + cardsPerPage).map((p) => {
                             return (
                                 <Card
@@ -86,12 +91,12 @@ const Legendary = () => {
                             );
                         })}
                     </Flex>
-                    <div style={{cursor: "pointer"}} onClick={handleArrowRightClick}>
+                    <Box as="div" cursor="pointer" onClick={handleArrowRightClick}>
                         <ArrowRight/>
-                    </div>
+                    </Box>
                 </Flex>
             </Flex>
-        </Flex>
+        </Box>
     );
 };
 

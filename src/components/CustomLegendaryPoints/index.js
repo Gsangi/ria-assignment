@@ -5,7 +5,7 @@ const CustomLegendaryPoints = ({text, points}) => {
         <Flex textStyle="heading3" textColor="#FDFDFD" direction="column">
             <Text>{text}</Text>
             <Text>{points}</Text>
-            <Grid width="180px" height="8px" bg="white" gridTemplateColumns="repeat(10,1fr)" borderRadius="4px" overflow="hidden">
+            <Grid width="120px" height="8px" bg="white" gridTemplateColumns="repeat(10,1fr)" borderRadius="4px" overflow="hidden">
                 <Grid bg="yellow" gridColumn="1/9" />
             </Grid>
         </Flex>
